@@ -23,6 +23,21 @@ export default function Home() {
       setTurnColor(2 / turnColor);
       setboard(newBoard);
     }
+    if (board[y - 1] !== undefined && board[y - 1][x] === 2 / turnColor) {
+      newBoard[y][x] = turnColor;
+      setTurnColor(2 / turnColor);
+      setboard(newBoard);
+    }
+    if (board[x - 1] !== undefined && board[y][x - 1] === 2 / turnColor) {
+      newBoard[y][x] = turnColor;
+      setTurnColor(2 / turnColor);
+      setboard(newBoard);
+    }
+    if (board[x + 1] !== undefined && board[y][x + 1] === 2 / turnColor) {
+      newBoard[y][x] = turnColor;
+      setTurnColor(2 / turnColor);
+      setboard(newBoard);
+    }
   };
   return (
     <div className={styles.container}>
