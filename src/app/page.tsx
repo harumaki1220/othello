@@ -24,16 +24,14 @@ export default function Home() {
     [1, -1],
     [0, -1],
     [-1, -1],
-  ];
+  ]; //8方向を表す
+
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
     const newBoard = structuredClone(board);
-
-    if (board[y + 1] !== undefined && board[y + 1][x] === 2 / turnColor) {
-      newBoard[y][x] = turnColor;
-      setTurnColor(2 / turnColor);
-      setboard(newBoard);
-    }
+    if (board[y][x] !== 0) return null;
+    const flipped = false;
+    directions.forEach(([dy, dx]) => {});
   };
   return (
     <div className={styles.container}>
