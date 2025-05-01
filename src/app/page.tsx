@@ -24,14 +24,44 @@ export default function Home() {
     [1, -1],
     [0, -1],
     [-1, -1],
-  ]; //8方向を表す
+  ];
 
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
     const newBoard = structuredClone(board);
     if (board[y][x] !== 0) return null;
-    const flipped = false;
-    directions.forEach(([dy, dx]) => {});
+    let flipped = false;
+    directions.forEach(([dy, dx]) => {
+      let n = 1;
+      if (x >= 0 && x < 8 && y >= 0 && y < 8 && board[y + dy][x + dx] === 2 / turnColor) {
+        while (
+          x >= 0 &&
+          x < 8 &&
+          y >= 0 &&
+          y < 8 &&
+          board[y + dy * (n + 1)][x + dx * (n + 1)] === 2 / turnColor
+        ) {
+          n++;
+        }
+        if (
+          x >= 0 &&
+          x < 8 &&
+          y >= 0 &&
+          y < 8 &&
+          board[y + dy * (n + 1)][x + dx * (n + 1)] === turnColor
+        ) {
+          newBoard[y][x] = turnColor;
+          for (let i = 1; i <= n; i++) {
+            newBoard[y + dy * i][x + dx * i] = turnColor;
+          }
+          flipped = true;
+        }
+      }
+    });
+    if (flipped) {
+      setTurnColor(2 / turnColor);
+      setboard(newBoard);
+    }
   };
   return (
     <div className={styles.container}>
