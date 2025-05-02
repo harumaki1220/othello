@@ -32,22 +32,18 @@ export default function Home() {
     if (board[y][x] !== 0) return null;
     let flipped = false;
     directions.forEach(([dy, dx]) => {
-      let n = 1;
-      if (x >= 0 && x < 8 && y >= 0 && y < 8 && board[y + dy][x + dx] === 2 / turnColor) {
+      let n = 0;
+      if (board[y + dy] !== undefined && board[y + dy][x + dx] === 2 / turnColor) {
         while (
-          x >= 0 &&
-          x < 8 &&
-          y >= 0 &&
-          y < 8 &&
+          board[y + dy * (n + 1)] !== undefined &&
+          board[y + dy * (n + 1)][x + dx * (n + 1)] !== undefined &&
           board[y + dy * (n + 1)][x + dx * (n + 1)] === 2 / turnColor
         ) {
           n++;
         }
         if (
-          x >= 0 &&
-          x < 8 &&
-          y >= 0 &&
-          y < 8 &&
+          board[y + dy * (n + 1)] !== undefined &&
+          board[y + dy * (n + 1)][x + dx * (n + 1)] !== undefined &&
           board[y + dy * (n + 1)][x + dx * (n + 1)] === turnColor
         ) {
           newBoard[y][x] = turnColor;
