@@ -32,3 +32,19 @@
   background-position: 90px;
   border-radius: 80px;
 }
+
+.possible {
+  width: 30px;
+  height: 30px;
+  background-color: grey;
+  background-position: 90px;
+  border-radius: 80px;
+}
+
+.score {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100px;
+  height: 100px;
+  background-color: black;
+}
