@@ -51,6 +51,17 @@ export default function Home() {
       setboard(newBoard);
     }
   };
+  let scoreblack = 0;
+  let scorewhite = 0;
+  const flat = board.flat();
+  for (const a of flat) {
+    if (a === 1) {
+      scoreblack += 1;
+    } else if (a === 2) {
+      scorewhite += 1;
+    }
+  }
+  console.log(scoreblack);
   return (
     <div className={styles.container}>
       <div className={styles.board}>
@@ -66,6 +77,14 @@ export default function Home() {
             </div>
           )),
         )}
+        <div className={styles.scoreBoard}>
+          <div className={styles.scoreBlack}>
+            <p>BLACK {scoreblack}</p>
+          </div>
+          <div className={styles.scoreWhite}>
+            <p>WHITE {scorewhite}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
