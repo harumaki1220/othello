@@ -14,7 +14,7 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-  ]); // 0: なし , 1: 黒, 2: 白, 3: 候補地
+  ]); // 0: なし , 1: 黒, 2: 白,
   const directions = [
     [-1, 0],
     [-1, 1],
@@ -51,17 +51,16 @@ export default function Home() {
       setboard(newBoard);
     }
   };
-  let scoreblack = 0;
-  let scorewhite = 0;
+
+  type CountMap = Record<number, number>;
   const flat = board.flat();
-  for (const a of flat) {
-    if (a === 1) {
-      scoreblack += 1;
-    } else if (a === 2) {
-      scorewhite += 1;
-    }
-  }
-  console.log(scoreblack);
+  const count = flat.reduce<CountMap>((acc, cur) => {
+    acc[cur] = (acc[cur] || 0) + 1;
+    return acc;
+  }, {} as CountMap);
+  const blackPoint = count[1];
+  const whitePoint = count[2];
+
   return (
     <div className={styles.container}>
       <div className={styles.board}>
@@ -79,10 +78,10 @@ export default function Home() {
         )}
         <div className={styles.scoreBoard}>
           <div className={styles.scoreBlack}>
-            <p>BLACK {scoreblack}</p>
+            <p>BLACK {blackPoint}</p>
           </div>
           <div className={styles.scoreWhite}>
-            <p>WHITE {scorewhite}</p>
+            <p>WHITE {whitePoint}</p>
           </div>
         </div>
       </div>
