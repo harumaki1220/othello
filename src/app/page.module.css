@@ -33,14 +33,6 @@
   border-radius: 80px;
 }
 
-.possible {
-  width: 30px;
-  height: 30px;
-  background-color: grey;
-  background-position: 90px;
-  border-radius: 80px;
-}
-
 .scoreBoard {
   position: absolute;
   top: 200px;

@@ -2,35 +2,15 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
-
-export default function Home() {
-  const [turnColor, setTurnColor] = useState(1);
-  const [board, setboard] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-  ]); // 0: なし , 1: 黒, 2: 白,
-  const directions = [
-    [-1, 0],
-    [-1, 1],
-    [0, 1],
-    [1, 1],
-    [1, 0],
-    [1, -1],
-    [0, -1],
-    [-1, -1],
-  ];
-
-  const clickHandler = (x: number, y: number) => {
-    console.log(x, y);
-    const newBoard = structuredClone(board);
-    if (board[y][x] !== 0) return null;
-    let flip = false;
+const colorC = (
+  board: number[][],
+  y: number,
+  x: number,
+  directions: number[][],
+  turnColor: number,
+) => {
+  const newBoard = structuredClone(board);
+  if (board[y][x] === 0 || board[y][x] === 3)
     directions.forEach(([dy, dx]) => {
       let n = 1;
       if (board[y + dy] !== undefined && board[y + dy][x + dx] === 2 / turnColor) {
@@ -42,14 +22,70 @@ export default function Home() {
           for (let i = 1; i <= n; i++) {
             newBoard[y + dy * i][x + dx * i] = turnColor;
           }
-          flip = true;
+          if (board[y + dy * n] !== undefined && board[y + dy * n][x + dx * n] === turnColor) {
+            newBoard[y][x] = turnColor;
+          }
         }
       }
     });
-    if (flip) {
-      setTurnColor(2 / turnColor);
-      setboard(newBoard);
+  console.log(newBoard);
+  return newBoard;
+};
+
+const reference = (directions: number[][], board: number[][], turnColor: number) => {
+  const newBoard = structuredClone(board);
+  for (let y = 0; y <= 7; y++) {
+    for (let x = 0; x <= 7; x++) {
+      directions.forEach(([dy, dx]) => {
+        const newBoard = structuredClone(board);
+        let n = 1;
+        if (board[y + dy] !== undefined && board[y + dy][x + dx] === 2 / turnColor) {
+          while (
+            board[y + dy * n] !== undefined &&
+            board[y + dy * n][x + dx * n] === 2 / turnColor
+          ) {
+            n++;
+          }
+          if (board[y + dy * n] !== undefined && board[y + dy * n][x + dx * n] === turnColor) {
+            newBoard[y][x] = turnColor;
+            if (board[y + dy * n] !== undefined && board[y + dy * n][x + dx * n] === turnColor) {
+              newBoard[y][x] = 3;
+            }
+          }
+        }
+      });
     }
+  }
+  return newBoard;
+};
+
+export default function Home() {
+  const [turnColor, setTurnColor] = useState(1);
+  const [board, setboard] = useState([
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 3, 0, 0, 0],
+    [0, 0, 0, 1, 2, 3, 0, 0],
+    [0, 0, 3, 2, 1, 0, 0, 0],
+    [0, 0, 0, 3, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+  ]); // 0: なし , 1: 黒, 2: 白, 3:候補地
+  const directions = [
+    [-1, 0],
+    [-1, 1],
+    [0, 1],
+    [1, 1],
+    [1, 0],
+    [1, -1],
+    [0, -1],
+    [-1, -1],
+  ];
+  const clickHandler = (x: number, y: number) => {
+    console.log(x, y);
+    setboard(colorC(board, y, x, directions, turnColor));
+    setTurnColor(2 / turnColor);
+    // setboard(reference(directions, board, turnColor));
   };
 
   type CountMap = Record<number, number>;
@@ -70,7 +106,7 @@ export default function Home() {
               {color !== 0 && (
                 <div
                   className={styles.stone}
-                  style={{ background: color === 1 ? '#000' : '#fff' }}
+                  style={{ background: color === 1 ? '#000' : color === 2 ? '#fff' : '#ff0' }}
                 />
               )}
             </div>
