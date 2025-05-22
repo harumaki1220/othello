@@ -34,6 +34,7 @@ const colorC = (
 
 const reference = (directions: number[][], board: number[][], turnColor: number) => {
   const newBoard = structuredClone(board);
+  console.log(1000);
   for (let y = 0; y <= 7; y++) {
     for (let x = 0; x <= 7; x++) {
       directions.forEach(([dy, dx]) => {
@@ -83,9 +84,10 @@ export default function Home() {
   ];
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
-    setboard(colorC(board, y, x, directions, turnColor));
+    const p = colorC(board, y, x, directions, turnColor);
     setTurnColor(2 / turnColor);
-    // setboard(reference(directions, board, turnColor));
+    const f = reference(directions, p, turnColor);
+    setboard(f);
   };
 
   type CountMap = Record<number, number>;
