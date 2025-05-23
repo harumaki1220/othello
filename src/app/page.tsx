@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
+let flip = false;
 const colorC = (
   board: number[][],
   y: number,
@@ -28,33 +29,39 @@ const colorC = (
         }
       }
     });
-  console.log(newBoard);
   return newBoard;
 };
 
 const reference = (directions: number[][], board: number[][], turnColor: number) => {
   const newBoard = structuredClone(board);
-  console.log(1000);
   for (let y = 0; y <= 7; y++) {
     for (let x = 0; x <= 7; x++) {
-      directions.forEach(([dy, dx]) => {
-        const newBoard = structuredClone(board);
-        let n = 1;
-        if (board[y + dy] !== undefined && board[y + dy][x + dx] === 2 / turnColor) {
-          while (
-            board[y + dy * n] !== undefined &&
-            board[y + dy * n][x + dx * n] === 2 / turnColor
-          ) {
-            n++;
-          }
-          if (board[y + dy * n] !== undefined && board[y + dy * n][x + dx * n] === turnColor) {
-            newBoard[y][x] = turnColor;
-            if (board[y + dy * n] !== undefined && board[y + dy * n][x + dx * n] === turnColor) {
-              newBoard[y][x] = 3;
+      if (newBoard[y][x] === 3) {
+        newBoard[y][x] = 0;
+      }
+    }
+  }
+  for (let y = 0; y <= 7; y++) {
+    for (let x = 0; x <= 7; x++) {
+      if (newBoard[y][x] === 0) {
+        directions.forEach(([dy, dx]) => {
+          if (board[y + dy] !== undefined && board[y + dy][x + dx] === 2 / turnColor) {
+            for (let n = 1; n < 9; n++) {
+              if (
+                board[y + dy * n] === undefined ||
+                board[y + dy * n][x + dx * n] === 0 ||
+                board[y + dy * n][x + dx * n] === 3
+              ) {
+                break;
+              }
+
+              if (board[y + dy * n] !== undefined && board[y + dy * n][x + dx * n] === turnColor) {
+                newBoard[y][x] = 3;
+              }
             }
           }
-        }
-      });
+        });
+      }
     }
   }
   return newBoard;
@@ -85,9 +92,14 @@ export default function Home() {
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
     const p = colorC(board, y, x, directions, turnColor);
-    setTurnColor(2 / turnColor);
-    const f = reference(directions, p, turnColor);
-    setboard(f);
+    const f = reference(directions, p, 2 / turnColor);
+    if (board[y][x] === 1 || board[y][x] === 2 || board[y][x] === 0) flip = false;
+    else if (board[y][x] === 3) flip = true;
+    if (flip) {
+      setTurnColor(2 / turnColor);
+      setboard(f);
+      console.log(board);
+    }
   };
 
   type CountMap = Record<number, number>;
