@@ -10,6 +10,7 @@ const colorC = (
   directions: number[][],
   turnColor: number,
 ) => {
+  flip = false;
   const newBoard = structuredClone(board);
   if (board[y][x] === 0 || board[y][x] === 3)
     directions.forEach(([dy, dx]) => {
@@ -19,6 +20,7 @@ const colorC = (
           n++;
         }
         if (board[y + dy * n] !== undefined && board[y + dy * n][x + dx * n] === turnColor) {
+          flip = true;
           newBoard[y][x] = turnColor;
           for (let i = 1; i <= n; i++) {
             newBoard[y + dy * i][x + dx * i] = turnColor;
@@ -72,13 +74,13 @@ export default function Home() {
   const [board, setboard] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 3, 0, 0, 0],
-    [0, 0, 0, 1, 2, 3, 0, 0],
-    [0, 0, 3, 2, 1, 0, 0, 0],
-    [0, 0, 0, 3, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-  ]); // 0: なし , 1: 黒, 2: 白, 3:候補地
+    [0, 0, 0, 0, 0, 0, 0, 0],
+  ]); // 0: なし , 1: 黒, 2: 白
   const directions = [
     [-1, 0],
     [-1, 1],
@@ -93,12 +95,9 @@ export default function Home() {
     console.log(x, y);
     const p = colorC(board, y, x, directions, turnColor);
     const f = reference(directions, p, 2 / turnColor);
-    if (board[y][x] === 1 || board[y][x] === 2 || board[y][x] === 0) flip = false;
-    else if (board[y][x] === 3) flip = true;
     if (flip) {
       setTurnColor(2 / turnColor);
       setboard(f);
-      console.log(board);
     }
   };
 
@@ -108,8 +107,8 @@ export default function Home() {
     acc[cur] = (acc[cur] || 0) + 1;
     return acc;
   }, {} as CountMap);
-  const blackPoint = count[1];
-  const whitePoint = count[2];
+  const blackPoint = count[1] === undefined ? 0 : count[1];
+  const whitePoint = count[2] === undefined ? 0 : count[2];
 
   return (
     <div className={styles.container}>
