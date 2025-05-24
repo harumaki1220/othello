@@ -57,3 +57,15 @@
   left: 50px;
   font-size: 30px;
 }
+
+.pass {
+  position: absolute;
+  top: 50px;
+  right: 100px;
+  display: flex;
+  width: 150px;
+  height: 130px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+}

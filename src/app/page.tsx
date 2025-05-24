@@ -101,6 +101,12 @@ export default function Home() {
     }
   };
 
+  const pass = () => {
+    const newBoard = structuredClone(board);
+    const f = reference(directions, newBoard, 2 / turnColor);
+    setTurnColor(2 / turnColor);
+    return setboard(f);
+  };
   type CountMap = Record<number, number>;
   const flat = board.flat();
   const count = flat.reduce<CountMap>((acc, cur) => {
@@ -112,6 +118,19 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.scoreBoard}>
+        <div className={styles.scoreBlack}>
+          <p>BLACK {blackPoint}</p>
+        </div>
+        <div className={styles.scoreWhite}>
+          <p>WHITE {whitePoint}</p>
+        </div>
+      </div>
+      <div className={styles.pass}>
+        <button onClick={pass}>
+          <p style={{ fontSize: 40 }}>PASS</p>
+        </button>
+      </div>
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
@@ -125,14 +144,6 @@ export default function Home() {
             </div>
           )),
         )}
-        <div className={styles.scoreBoard}>
-          <div className={styles.scoreBlack}>
-            <p>BLACK {blackPoint}</p>
-          </div>
-          <div className={styles.scoreWhite}>
-            <p>WHITE {whitePoint}</p>
-          </div>
-        </div>
       </div>
     </div>
   );
