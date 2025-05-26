@@ -132,7 +132,7 @@ export default function Home() {
         </button>
       </div>
       <div className={styles.board}>
-        {board.map((row, y) =>
+        {reference(directions, board, turnColor).map((row, y) =>
           row.map((color, x) => (
             <div className={styles.cell} key={`${x}-${y}`} onClick={() => clickHandler(x, y)}>
               {color !== 0 && (
